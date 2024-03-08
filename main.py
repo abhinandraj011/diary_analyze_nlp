@@ -1,16 +1,30 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+import streamlit as st
+import glob
+import nltk
+from nltk.sentiment import SentimentIntensityAnalyzer
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+analyzer=SentimentIntensityAnalyzer()
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+#get the filepaths of the each txt files
+filepaths=sorted(glob.glob("diary/*.txt"))
+
+#created two empty list to store the sentiment analysis scores
+positivity=[]
+negativity=[]
+
+#read the contents of the file and get the positivity and negativity scores of each day
+for filepath in filepaths:
+    with open(f"{filepath}","r") as file:
+        content= file.read()
+        scores=analyzer.polarity_scores(content)
+        positivity.append(scores['pos'])
+        negativity.append(scores['neg'])
+
+#extract the dates
+
+st.title("Diary Tone")
+st.subheader("Positivity")
+st.subheader("Negativity")
+
+
